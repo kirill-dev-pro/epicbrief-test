@@ -1,0 +1,15 @@
+{
+  "editor.codeActionsOnSave": {
+
+    "source.fixAll.eslint": true
+  },
+  "editor.indentSize": 2,
+  "editor.detectIndentation": false,
+  "cSpell.words": [
+    "chakra",
+    "clsx",
+    "Hubspot",
+    "tanstack"
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
