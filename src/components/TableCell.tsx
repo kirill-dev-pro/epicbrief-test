@@ -1,6 +1,6 @@
-import { updateCall } from '../api'
 import { AccountField } from './AccountField'
 import { useData } from './DataContext'
+import { updateCall } from '../api'
 import { Input, usePrevious, useOutsideClick, Spinner, useToast, Textarea } from '@chakra-ui/react'
 import { Cell } from '@tanstack/react-table'
 import { SingleDatepicker } from 'chakra-dayzed-datepicker'
@@ -108,9 +108,11 @@ function EditableField({
 
   useEffect(() => {
     if (prevEditing && !isEditing) {
-      onChange(newValue)
+      if (newValue !== value) {
+        onChange(newValue)
+      }
     }
-  }, [isEditing, onChange, prevEditing, newValue])
+  }, [isEditing, onChange, prevEditing, newValue, value])
 
   if (isEditing) {
     if (multiline) {
