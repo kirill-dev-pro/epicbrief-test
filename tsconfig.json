@@ -13,8 +13,11 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2017",
-    "types": ["vite/client"]
+    "target": "ES5",
+    "types": ["vite/client"],
+    "paths": {
+      "*": ["./src/*"]
+    }
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"],
@@ -24,7 +27,10 @@
     "files": true,
     "compilerOptions": {
       "module": "esnext",
-      "isolatedModules": false
+      "isolatedModules": false,
+      "paths": {
+        "*": ["./src/*"]
+      }
     }
   }
 }
