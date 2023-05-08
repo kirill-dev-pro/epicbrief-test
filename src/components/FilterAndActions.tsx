@@ -6,6 +6,7 @@ import {
   CheckIcon,
   ChevronDownIcon,
   HamburgerIcon,
+  MinusIcon,
 } from '@chakra-ui/icons'
 import {
   Menu,
@@ -22,6 +23,7 @@ import {
   AlertDialogOverlay,
   useToast,
   Input,
+  IconButton,
 } from '@chakra-ui/react'
 import { Table } from '@tanstack/react-table'
 import { useMemo, useRef, useState } from 'react'
@@ -31,6 +33,7 @@ const EMAIL_REGEX = /^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$/gm
 
 export function FilterAndActions({ table }: { table: Table<TableData> }) {
   const timeColumn = useMemo(() => table.getColumn('time'), [table])
+  const sortOrder = timeColumn && timeColumn.getIsSorted()
 
   return (
     <div className='flex gap-2'>
@@ -38,26 +41,34 @@ export function FilterAndActions({ table }: { table: Table<TableData> }) {
       <ActionsMenu table={table} />
       <div className='flex-1' />
       {timeColumn && (
-        <Button
-          onClick={() => table.getColumn('time')?.toggleSorting()}
-          aria-label='Sort'
-          leftIcon={
-            timeColumn.getIsSorted() ? (
-              timeColumn.getIsSorted() === 'desc' ? (
-                <ArrowDownIcon h={3} w={3} />
+        <>
+          <Button
+            onClick={() => table.getColumn('time')?.toggleSorting()}
+            aria-label='Sort'
+            className='!hidden md:!block'
+            leftIcon={
+              sortOrder ? sortOrder === 'desc' ? <ArrowDownIcon /> : <ArrowUpIcon /> : <MinusIcon />
+            }
+          >
+            Sort: {sortOrder ? (sortOrder === 'desc' ? 'Recent' : 'Old') : 'None'}
+          </Button>
+          <IconButton
+            onClick={() => table.getColumn('time')?.toggleSorting()}
+            aria-label='Sort'
+            className='md:!hidden'
+            icon={
+              sortOrder ? (
+                sortOrder === 'desc' ? (
+                  <ArrowDownIcon h={3} w={3} />
+                ) : (
+                  <ArrowUpIcon h={3} w={3} />
+                )
               ) : (
-                <ArrowUpIcon h={3} w={3} />
+                <MinusIcon h={3} w={3} />
               )
-            ) : undefined
-          }
-        >
-          Sort:{' '}
-          {timeColumn.getIsSorted()
-            ? timeColumn.getIsSorted() === 'desc'
-              ? 'Recent'
-              : 'Old'
-            : 'None'}
-        </Button>
+            }
+          />
+        </>
       )}
       {timeColumn && <DateRangeFilter column={timeColumn} className='' />}
     </div>
@@ -79,7 +90,7 @@ export function FilterMenu({ columnId, table }: { columnId: string; table: Table
   return (
     <Menu>
       <MenuButton as={Button} leftIcon={<HamburgerIcon />}>
-        Filters
+        <span className='hidden md:block'>Filters</span>
       </MenuButton>
       <MenuList>
         {!!columnFilterValue && (
@@ -235,7 +246,7 @@ function ActionsMenu({ table }: { table: Table<TableData> }) {
 
       <Menu>
         <MenuButton as={Button} rightIcon={<ChevronDownIcon />} isDisabled={!selectedRows.length}>
-          Actions
+          <span className='hidden md:block'>Actions</span>
         </MenuButton>
         <MenuList>
           <MenuItem onClick={exportDialog.onOpen}>Send Email</MenuItem>
